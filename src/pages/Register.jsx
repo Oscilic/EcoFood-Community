@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 import { auth } from "../services/firebase";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
-import { saveUserData } from "../services/userService";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { SaveUserData } from "../services/userService";
 import { sendEmailVerification } from "firebase/auth";
 
 export default function Register() {
@@ -16,7 +16,7 @@ export default function Register() {
         e.preventDefault();
         try {
             const cred = await createUserWithEmailAndPassword(auth, email, password);
-            await saveUserData(cred.user.uid, { nombre, tipo, email });
+            await SaveUserData(cred.user.uid, { nombre, tipo, email });
             Swal.fire("Registrado", "Usuario creado correctamente", "success");
             navigate("/login");
         } catch (error) {
@@ -57,7 +57,7 @@ const handleRegister = async (e) => {
     try {
         const credenciales = await createUserWithEmailAndPassword(auth, email, password);
         await sendEmailVerification(credenciales.user);
-        await saveUserData(credenciales.user.uid, { nombre, tipo, email });
+        await SaveUserData(credenciales.user.uid, { nombre, tipo, email });
         Swal.fire("¡Registro exitoso!", "Revisa tu correo para verificar tu cuenta antes de iniciar sesión.", "success");
         navigate("/login");
     } catch (error) {

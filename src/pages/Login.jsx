@@ -1,56 +1,60 @@
-import { useState } from 'react';
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword, setPersistence, browserLocalPersistence } from "firebase/auth";
 import { auth } from "../services/firebase";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 
-export default function Login() {
+function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
     const navigate = useNavigate();
-    const handleLogin = async (e) => {
+    const handleLogin = async e => {
         e.preventDefault();
         try {
-            await setPersistence(auth, browserLocalPersistence);
-            await signInWithEmailAndPassword(auth, email, password);
-            Swal.fire("Bienvenido", "Has iniciado sesión correctamente", "success");
-            navigate("/home");
-        } catch (error) {
-            Swal.fire("Error", "Credenciales incorrectas o fallo de red", "error");
+            const userCred = await signInWithEmailAndPassword(auth, email, password);
+            if (!userCred.user.emailVerified) {
+            setError("Verifica tu correo antes de poder utilzar EcoFood.");
+            return;
+            }
+            const ref = doc(db, "usuarios", userCred.user.uid);
+            const snap = await getDoc(ref);
+            if (snap.exists()) {
+            const data = snap.data();
+            if (data.tipo === "admin" && data.esPrincipal) {
+                navigate("/admin/administracion");
+            } else if (data.tipo === "admin") {
+                navigate("/admin/dashboard");
+            } else if (data.tipo === "cliente") {
+                navigate("/cliente/home");
+            } else if (data.tipo === "empresa") {
+                navigate("/empresa/perfil");
+            } else {
+                setError("Error al inicar sesión. Por favor, inténtalo de nuevo.");
+            }
+            } else {
+            setError("Usuario no encontrado.");
+            }
+        } catch (err) {
+            console.error(err);
+            setError("Credenciales inválidas o error de conexión.");
         }
     };
     return (
-        <div className="container mt-5">
-            <h2>Iniciar Sesión</h2>
-            <form onSubmit={handleLogin}>
-                <div className="mb-3">
-                    <label className="form-label">Correo Electrónico</label>
-                    <input type="email" className="form-control" value={email} onChange={(e) => setEmail(e.target.value)} required/>
-                </div>
-                <div className="mb-3">
-                    <label className="form-label">Contraseña</label>
-                    <input type="password" className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} required/>
-                </div>
-                <button type="submit" className="btn btn-primary">Iniciar Sesión</button>
-                <p>¿Olvidaste tu contraseña?<Link to="/recuperar">Recupérala aquí</Link></p>
-            </form>
+    <div className="container mt-4">
+        <h2>Iniciar Sesión</h2>
+        <form onSubmit={handleLogin}>
+            <input className="form-control mb-2" type="email" placeholder="Correo" onChange={e => setEmail(e.target.value)} required/>
+            <input className="form-control mb-2" type="password" placeholder="Contraseña" onChange={e => setPassword(e.target.value)} required/>
+            <button className="btn btn-success">Ingresar</button>
+        </form>
+        <p className="text-danger mt-3">{error}</p>
+        <div className="login-links mt-3" style={{ textAlign: "center" }}>
+            <a href="/registro" className="me-3">¿No tienes cuenta? Regístrate</a>
+            <a href="/recuperar">¿Olvidaste tu contraseña?</a>
         </div>
+    </div>
     );
 }
-const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-        await setPersistence(auth, browserLocalPersistence);
-        const cred = await signInWithEmailAndPassword(auth, email, password);
-        if (!cred.user.emailVerified) {
-            Swal.fire("Verificación requerida", "Debes verificar tu correo antes de ingresar.", "warning");
-            return;
-        }
-        const datos = await getUserData(cred.user.uid);
-        console.log("Bienvenido", datos.nombre, "Tipo:", datos.tipo);
-        navigate("/home");
-    } catch (error) {
-        Swal.fire("Error", "Credenciales incorrectas", "error");
-    }
-};
+export default Login;
