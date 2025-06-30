@@ -32,7 +32,7 @@ export default function EditProfile() {
                 telefono: data.telefono,
                 direccion: data.direccion,
             });
-            Swal.fire("erfil actualizado", "", "success");
+            Swal.fire("Perfil actualizado", "", "success");
             SetEditing(false);
         } catch (error) {
             Swal.fire("Error", error.message, "error");

@@ -1,9 +1,9 @@
-import { useEffect } from "react";
-import CardProducto from "../components/CardProducto";
-import { GetUserData } from "../services/userService";
-import { useAuth } from "../context/AuthContext";
-
+import AboutUs from '../components/AboutUs'
 function Home() {
-    //añadir home
+    return (
+        <>
+            <AboutUs/>
+        </>
+    );
 }
 export default Home;

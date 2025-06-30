@@ -27,8 +27,8 @@ export default function MyOrders() {
                     empresaNombre,
                     estado: pedido.estado || "pendiente"
                 };
-            } catch (err) {
-                console.error("Error cargando pedido:", err);
+            } catch (error) {
+                console.error("Error cargando pedido: ", error);
                 return null;
             }
         }));
@@ -56,12 +56,7 @@ export default function MyOrders() {
         <div className="container mt-4">
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <h2>Mis Solicitudes</h2>
-                <button
-                    className="btn btn-outline-secondary"
-                    onClick={() => navigate(-1)}
-                >
-                    ← Volver
-                </button>
+                <button className="btn btn-outline-secondary" onClick={() => navigate(-1)}>← Volver</button>
             </div>
             {orders.length === 0 ? (
                 <p>No tienes solicitudes.</p>

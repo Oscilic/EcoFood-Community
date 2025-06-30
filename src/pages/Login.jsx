@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword, setPersistence, browserLocalPersistence } from "firebase/auth";
-import { auth } from "../services/firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "../services/firebase";
+import { getDoc, doc } from 'firebase/firestore';
 import Swal from "sweetalert2";
-import { Link } from "react-router-dom";
 
 function Login() {
     const [email, setEmail] = useState("");
@@ -15,21 +15,19 @@ function Login() {
         try {
             const userCred = await signInWithEmailAndPassword(auth, email, password);
             if (!userCred.user.emailVerified) {
-            setError("Verifica tu correo antes de poder utilzar EcoFood.");
-            return;
+                Swal.fire("Verificación requerida", "Verifica tu correo antes de poder utilzar EcoFood.","warning");
+                return;
             }
             const ref = doc(db, "usuarios", userCred.user.uid);
             const snap = await getDoc(ref);
             if (snap.exists()) {
             const data = snap.data();
-            if (data.tipo === "admin" && data.esPrincipal) {
-                navigate("/admin/administracion");
-            } else if (data.tipo === "admin") {
+            if (data.tipo === "admin") {
                 navigate("/admin/dashboard");
             } else if (data.tipo === "cliente") {
-                navigate("/cliente/home");
+                navigate("/client/home");
             } else if (data.tipo === "empresa") {
-                navigate("/empresa/perfil");
+                navigate("/business/profile");
             } else {
                 setError("Error al inicar sesión. Por favor, inténtalo de nuevo.");
             }
@@ -51,8 +49,8 @@ function Login() {
         </form>
         <p className="text-danger mt-3">{error}</p>
         <div className="login-links mt-3" style={{ textAlign: "center" }}>
-            <a href="/registro" className="me-3">¿No tienes cuenta? Regístrate</a>
-            <a href="/recuperar">¿Olvidaste tu contraseña?</a>
+            <a href="/register" className="me-3">¿No tienes cuenta? Regístrate</a>
+            <a href="/recovery">¿Olvidaste tu contraseña?</a>
         </div>
     </div>
     );

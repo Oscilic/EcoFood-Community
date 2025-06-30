@@ -7,8 +7,7 @@ import {
     DeleteProduct,
     GetBusinessProduct,
 } from "../../services/productService";
-import ProductoModal from "../../components/empresa/ProductoModal";
-import ProductoCard from "../../components/empresa/ProductoCard";
+import BusinessProductCard from "../../components/BusinessProductCard";
 
 export default function BusinessProducts() {
     const { user } = useAuth();
@@ -120,7 +119,7 @@ export default function BusinessProducts() {
                 </div>
             </div>
             {productosPagina.map((prod) => (
-                <ProductoCard key={prod.id} producto={prod} onEdit={(p) => {
+                <BusinessProductCard key={prod.id} producto={prod} onEdit={(p) => {
                     SetProductEdit(p);
                     SetModalShow(true);
                 }} onDelete={Delete} />

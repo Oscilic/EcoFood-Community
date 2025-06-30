@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { GetProducts } from "../../services/clientService";
-import ProductoCard from "../../components/ProductoCard";
+import ProductCard from "../../components/ProductCard";
 import { useAuth } from "../../context/AuthContext";
 import { OrderProduct } from "../../services/orderService";
 import Swal from "sweetalert2";
@@ -79,7 +79,7 @@ export default function ProductView() {
                 {products.length > 0 ? (
                     products.map(producto => (
                         <div className="col-md-4 mb-3" key={producto.id}>
-                            <ProductoCard
+                            <ProductCard
                                 producto={producto}
                                 recargar={LoadProducts}
                                 onSolicitar={() => handleOrder(producto)}

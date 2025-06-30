@@ -3,7 +3,7 @@ import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../services/firebase";
 import Swal from "sweetalert2";
 
-export default function RecuperarContraseña() {
+export default function Recovery() {
     const [email, setEmail] = useState("");
     const handleReset = async (e) => {
         e.preventDefault();
@@ -12,6 +12,7 @@ export default function RecuperarContraseña() {
             Swal.fire("Correo enviado", "Revisa tu bandeja para restablecer la contraseña", "success");
         } catch (error) {
             Swal.fire("Error", "No se pudo enviar el correo. Revisa el email ingresado.", "error");
+            console.error("Error al enviar el correo de verificación: ", error)
         }
     };
     return (

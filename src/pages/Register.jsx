@@ -12,15 +12,18 @@ export default function Register() {
     const [nombre, setNombre] = useState("");
     const [tipo, setTipo] = useState("cliente");
     const navigate = useNavigate();
+
     const handleRegister = async (e) => {
         e.preventDefault();
         try {
             const cred = await createUserWithEmailAndPassword(auth, email, password);
+            await sendEmailVerification(cred.user);
             await SaveUserData(cred.user.uid, { nombre, tipo, email });
-            Swal.fire("Registrado", "Usuario creado correctamente", "success");
+            Swal.fire("Registro exitoso", "Usuario creado correctamente, verifica tu correo elctrónico para iniciar sesión.", "success");
             navigate("/login");
         } catch (error) {
-            Swal.fire("Error", "No se pudo registrar", "error");
+            Swal.fire("Error", "No se pudo completar el registro, inténtalo de nuevo más tarde.", "error");
+            console.error("Error al registrar: ", error);
         }
     }
     return (
@@ -52,15 +55,3 @@ export default function Register() {
         </div>
     );
 }
-const handleRegister = async (e) => {
-    e.preventDefault();
-    try {
-        const credenciales = await createUserWithEmailAndPassword(auth, email, password);
-        await sendEmailVerification(credenciales.user);
-        await SaveUserData(credenciales.user.uid, { nombre, tipo, email });
-        Swal.fire("¡Registro exitoso!", "Revisa tu correo para verificar tu cuenta antes de iniciar sesión.", "success");
-        navigate("/login");
-    } catch (error) {
-        Swal.fire("Error", "No se pudo completar el registro", "error");
-    }
-};

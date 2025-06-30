@@ -1,14 +1,5 @@
 import { db } from "./firebase";
-import {
-    collection,
-    query,
-    where,
-    getDocs,
-    addDoc,
-    doc,
-    deleteDoc,
-    Timestamp,
-} from "firebase/firestore";
+import {collection,query,where,getDocs,addDoc,doc,deleteDoc,Timestamp} from "firebase/firestore";
 export const GetUserOrders = async (clienteId) => {
     const ref = collection(db, "pedidos");
     const q = query(ref, where("clienteId", "==", clienteId));
@@ -28,8 +19,8 @@ export const OrderProduct = async (clienteId, producto) => {
         productoNombre: producto.nombre,
         empresaId: producto.empresaId,
         empresaNombre: producto.empresaNombre,
-        estado: "pendiente",
         fecha: Timestamp.now(),
+        estado: "pendiente"
     };
     await addDoc(ref, newOrder);
 };

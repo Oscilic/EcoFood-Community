@@ -12,6 +12,7 @@ export default function CerrarSesion() {
             navigate("/login");
         } catch (error) {
             Swal.fire("Error", "No se pudo cerrar la sesión", "error");
+            console.error("Error al cerrar sesión: ", error)
         }
     };
     return (
