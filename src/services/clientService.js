@@ -16,7 +16,7 @@ export const GetProducts = async (filters) => {
         }
         if (filters.estado === "gratuito" && prod.precio > 0) continue;
         if (filters.estado === "pago" && prod.precio === 0) continue;
-        if (["porVencer", "vencido"].includes(filters.estado)) {
+        if (["porVencer", "vencido", "todos"].includes(filters.estado)) {
             const hoy = new Date();
             const vencimiento = new Date(prod.vencimiento);
             const dias = Math.ceil((vencimiento - hoy) / (1000 * 60 * 60 * 24));

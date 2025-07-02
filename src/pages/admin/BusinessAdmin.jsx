@@ -15,7 +15,7 @@ export default function BusinessAdmin() {
     };
     useEffect(() => {
         GetBusiness();
-    }, []);
+    });
     const handleChange = e => {
         SetForm({ ...form, [e.target.name]: e.target.value });
     };

@@ -8,6 +8,7 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [userData, SetUserData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const roles = ["admin", "cliente", "empresa"];
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
             if(currentUser) {
@@ -31,7 +32,7 @@ export const AuthProvider = ({ children }) => {
         return <div>Cargando autenticación...</div>;
     }
     return (
-    <AuthContext.Provider value={{ user, userData, loading }}>
+    <AuthContext.Provider value={{ user, userData, loading , roles}}>
         {children}
     </AuthContext.Provider>
     );

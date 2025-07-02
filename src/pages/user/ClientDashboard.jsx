@@ -5,9 +5,9 @@ const ClientDashboard = () => {
     const navigate = useNavigate();
     const [hovered, setHovered] = React.useState(null);
     const cards = [
-        { key: "productos", label: "Visualizar Productos", desc: "Busca y solicita productos disponibles.", path: "/cliente/ver-productos" },
-        { key: "solicitudes", label: "Mis Solicitudes", desc: "Revisa el estado de tus pedidos y solicitudes.", path: "/cliente/mis-pedidos" },
-        { key: "perfil", label: "Editar Perfil", desc: "Modifica tu información personal.", path: "/cliente/editar-perfil" },
+        { key: "productos", label: "Visualizar Productos", desc: "Busca y solicita productos disponibles.", path: "/client/products" },
+        { key: "solicitudes", label: "Mis Solicitudes", desc: "Revisa el estado de tus pedidos y solicitudes.", path: "/client/orders" },
+        { key: "perfil", label: "Editar Perfil", desc: "Modifica tu información personal.", path: "/client/profile" },
     ];
     return (
         <div className="dashboard-container">

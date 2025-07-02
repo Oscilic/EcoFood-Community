@@ -85,10 +85,10 @@ export default function BusinessProfile() {
                 </>
             )}
             <hr />
-            <button className="btn btn-outline-dark mt-3" onClick={() => navigate("/empresa/productos")}>
+            <button className="btn btn-outline-dark mt-3" onClick={() => navigate("/business/products")}>
                 Administrar Productos
             </button>
-            <button className="btn btn-outline-primary mt-3 ms-2" onClick={() => navigate("/empresa/solicitudes")} >
+            <button className="btn btn-outline-primary mt-3 ms-2" onClick={() => navigate("/business/requests")} >
                 Ver Solicitudes
             </button>
         </div>

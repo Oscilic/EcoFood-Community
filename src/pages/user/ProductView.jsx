@@ -3,26 +3,26 @@ import { GetProducts } from "../../services/clientService";
 import ProductCard from "../../components/ProductCard";
 import { useAuth } from "../../context/AuthContext";
 import { OrderProduct } from "../../services/orderService";
-import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function ProductView() {
-    const [products, SetProducts] = useState([]);
+    const [productos, SetProducts] = useState([]);
     const [filter, SetFilter] = useState({ nombre: "", estado: "todos", orden: "az", cantidad: 10 });
     const { user } = useAuth();
     const navigate = useNavigate();
     useEffect(() => {
         LoadProducts();
-    }, [filter]);
+    },);
     const LoadProducts = async () => {
         const data = await GetProducts(filter);
         SetProducts(data);
     };
-    const handleOrder = async (producto) => {
-        console.log("Producto al solicitar:", producto);
+    const handleOrder = async (product) => {
+        console.log("Producto al solicitar:", product);
         const confirmacion = await Swal.fire({
             title: "¿Solicitar este producto?",
-            text: producto.nombre,
+            text: product.nombre,
             icon: "question",
             showCancelButton: true,
             confirmButtonText: "Sí, solicitar",
@@ -30,7 +30,7 @@ export default function ProductView() {
         });
         if (confirmacion.isConfirmed) {
             try {
-                await OrderProduct(user.uid, producto);
+                await OrderProduct(user.uid, product);
                 Swal.fire("Solicitud enviada", "", "success");
                 LoadProducts();
             } catch (error) {
@@ -76,13 +76,13 @@ export default function ProductView() {
                 </div>
             </div>
             <div className="row">
-                {products.length > 0 ? (
-                    products.map(producto => (
-                        <div className="col-md-4 mb-3" key={producto.id}>
+                {productos.length >= 1 ? (
+                    productos.map(product => (
+                        <div className="col-md-4 mb-3" key={product.id}>
                             <ProductCard
-                                producto={producto}
-                                recargar={LoadProducts}
-                                onSolicitar={() => handleOrder(producto)}
+                                product={product}
+                                reload={LoadProducts}
+                                onOrder={() => handleOrder(product)}
                             />
                         </div>
                     ))

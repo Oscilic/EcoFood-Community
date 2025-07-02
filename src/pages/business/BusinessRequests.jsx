@@ -37,7 +37,7 @@ export default function BusinessRequests() {
         if (user?.uid) {
             LoadRequests();
         }
-    }, [user]);
+    },);
     const UpdateState = async (solicitud, nuevoEstado) => {
         const orderRef = doc(db, "pedidos", solicitud.id);
         

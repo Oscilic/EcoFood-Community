@@ -15,9 +15,8 @@ export default function AdminLayout() {
       <header className="admin-topbar">
         <h1 className="admin-topbar-title">EcoFood Admin</h1>
         <nav className="admin-topbar-nav">
-          <Link to="/admin/clientes" className="admin-topbar-link">Clientes</Link>
-          <Link to="/admin/empresas" className="admin-topbar-link">Empresas</Link>
-          <Link to="/admin/registro" className="admin-topbar-link">Registrar Admin</Link>
+          <Link to="/admin/users" className="admin-topbar-link">Clientes</Link>
+          <Link to="/admin/business" className="admin-topbar-link">Empresas</Link>
         </nav>
         <button
           onClick={logout}

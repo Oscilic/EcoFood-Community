@@ -7,6 +7,7 @@ import {
     DeleteProduct,
     GetBusinessProduct,
 } from "../../services/productService";
+import ProductModal from "../../components/ProductModal";
 import BusinessProductCard from "../../components/BusinessProductCard";
 
 export default function BusinessProducts() {
@@ -27,7 +28,7 @@ export default function BusinessProducts() {
     };
     useEffect(() => {
         LoadProducts();
-    }, [user]);
+    },);
     const SaveProduct = async (producto) => {
         if (productEdit) {
             await UpdateProduct(productEdit.id, producto);
@@ -77,13 +78,13 @@ export default function BusinessProducts() {
                         className="btn btn-outline-secondary me-2"
                         onClick={() => navigate(-1)}
                     >
-                        ← Volver
+                        Volver
                     </button>
                     <button
                         className="btn btn-primary"
                         onClick={() => SetModalShow(true)}
                     >
-                        + Producto
+                        Nuevo producto
                     </button>
                 </div>
             </div>
@@ -131,7 +132,7 @@ export default function BusinessProducts() {
                     </button>
                 ))}
             </div>
-            <ProductoModal
+            <ProductModal
                 show={showModal}
                 onHide={() => {
                     SetModalShow(false);
