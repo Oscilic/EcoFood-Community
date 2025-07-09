@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc, query, collection, deleteDoc, where  } from "firebase/firestore";
+import { doc, getDoc, setDoc, query, collection, deleteDoc, where, getDocs } from "firebase/firestore";
 import { db } from "./firebase"
 
 export const GetUserData = async (uid) => {
@@ -25,7 +25,7 @@ export const SaveUserData = async (uid, data) => {
 };
 export const GetAdmins = async () => {
     const q = query(collection(db, "usuarios"), where("tipo", "==", "admin"));
-    const snapshot = await getDoc(q);
+    const snapshot = await getDocs(q);
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 };
 export const DeleteAdmin = async (id) => {

@@ -17,15 +17,21 @@ return (
         <p>Vence: {producto.vencimiento} - <strong>{badge}</strong></p>
         <p>Precio: ${producto.precio} | Cantidad: {producto.cantidad}</p>
         <button className="btn btn-warning btn-sm me-2" onClick={() => onEdit(producto)}>Editar</button>
-        <button className="btn btn-danger btn-sm" onClick={() => {
-        Swal.fire({
-            title: '¿Eliminar producto?',
-            showCancelButton: true,
-            confirmButtonText: 'Sí',
-        }).then((result) => {
-            if (result.isConfirmed) onDelete(producto.id);
-        });
-        }}>Eliminar</button>
+        <button
+            className="btn btn-danger btn-sm"
+            disabled={daysLeft < 0}
+            onClick={() => {
+                Swal.fire({
+                    title: '¿Eliminar producto?',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí',
+                }).then((result) => {
+                    if (result.isConfirmed) onDelete(producto.id);
+                });
+            }}
+        >
+            Eliminar
+        </button>
     </div>
     </div>
 );

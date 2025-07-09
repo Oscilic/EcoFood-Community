@@ -1,3 +1,4 @@
+import '../../components/layouts/styles/GeneralStyle.css';
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -9,6 +10,7 @@ import {
 } from "../../services/productService";
 import ProductModal from "../../components/ProductModal";
 import BusinessProductCard from "../../components/BusinessProductCard";
+const searchRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\s]*$/;
 
 export default function BusinessProducts() {
     const { user } = useAuth();
@@ -16,6 +18,7 @@ export default function BusinessProducts() {
     const [showModal, SetModalShow] = useState(false);
     const [productEdit, SetProductEdit] = useState(null);
     const [search, SetSearch] = useState("");
+    const [searchError, SetSearchError] = useState("");
     const [statusFilter, SetStatusFilter] = useState("todos");
     const [order, SetOrderBy] = useState("nombre-asc");
     const [perPage, SetAmountPerPage] = useState(5);
@@ -56,7 +59,7 @@ export default function BusinessProducts() {
                 return true;
             });
         }
-        if (search) {
+        if (search && !searchError) {
             lista = lista.filter((p) => p.nombre.toLowerCase().includes(search.toLowerCase()));
         }
         if (order === "nombre-asc") lista.sort((a, b) => a.nombre.localeCompare(b.nombre));
@@ -69,6 +72,15 @@ export default function BusinessProducts() {
     const totalPaginas = Math.ceil(productosFiltrados.length / perPage);
     const inicio = (currentPage - 1) * perPage;
     const productosPagina = productosFiltrados.slice(inicio, inicio + perPage);
+    const handleSearchChange = (e) => {
+        const value = e.target.value;
+        if (!searchRegex.test(value)) {
+            SetSearchError("La búsqueda solo puede contener letras, números y espacios.");
+        } else {
+            SetSearchError("");
+        }
+        SetSearch(value);
+    };
     return (
         <div className="container mt-4">
             <div className="d-flex justify-content-between align-items-center mb-3">
@@ -90,7 +102,15 @@ export default function BusinessProducts() {
             </div>
             <div className="row mb-3">
                 <div className="col-md-3">
-                    <input className="form-control" placeholder="Buscar" value={search} onChange={e => SetSearch(e.target.value)} />
+                    <input
+                        className="form-control"
+                        placeholder="Buscar"
+                        value={search}
+                        onChange={handleSearchChange}
+                    />
+                    {searchError && (
+                        <div className="text-danger mt-1" id="error-search">{searchError}</div>
+                    )}
                 </div>
                 <div className="col-md-3">
                     <select className="form-select" value={statusFilter} onChange={e => SetStatusFilter(e.target.value)}>

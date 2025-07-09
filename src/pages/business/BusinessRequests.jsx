@@ -1,3 +1,4 @@
+import '../../components/layouts/styles/GeneralStyle.css';
 import { useEffect, useState } from "react";
 import { collection, query, where, getDocs, doc, updateDoc, runTransaction, getDoc } from "firebase/firestore";
 import { db } from "../../services/firebase";
@@ -5,10 +6,24 @@ import { useAuth } from "../../context/AuthContext";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
+//const searchRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\s]*$/;
+
 export default function BusinessRequests() {
     const { user } = useAuth();
     const [requests, SetRequests] = useState([]);
     const navigate = useNavigate();
+    // Si en el futuro se agregan filtros o búsqueda, usar este patrón:
+    // const [search, SetSearch] = useState("");
+    // const [searchError, SetSearchError] = useState("");
+    // const handleSearchChange = (e) => {
+    //     const value = e.target.value;
+    //     if (!searchRegex.test(value)) {
+    //         SetSearchError("La búsqueda solo puede contener letras, números y espacios.");
+    //     } else {
+    //         SetSearchError("");
+    //     }
+    //     SetSearch(value);
+    // };
     const LoadRequests = async () => {
         if (!user) return;
         const ordersRef = collection(db, "pedidos");

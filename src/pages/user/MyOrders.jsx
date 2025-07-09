@@ -1,3 +1,4 @@
+import '../../components/layouts/styles/GeneralStyle.css';
 import { useEffect, useState } from "react";
 import { GetUserOrders, CancelOrder } from "../../services/orderService";
 import { doc, getDoc } from "firebase/firestore";
@@ -11,6 +12,7 @@ export default function MyOrders() {
     const [orders, SetOrders] = useState([]);
     const navigate = useNavigate();
     const LoadOrders = async () => {
+        if (!user?.uid) return; // Validación extra de usuario
         const rawOrders = await GetUserOrders(user.uid);
         const detailedOrders = await Promise.all(rawOrders.map(async (pedido) => {
             try {
@@ -47,9 +49,13 @@ export default function MyOrders() {
             cancelButtonText: "No"
         });
         if (confirm.isConfirmed) {
-            await CancelOrder(pedidoId);
-            Swal.fire("Cancelado", "Tu solicitud fue cancelada.", "success");
-            LoadOrders();
+            try {
+                await CancelOrder(pedidoId);
+                Swal.fire("Cancelado", "Tu solicitud fue cancelada.", "success");
+                LoadOrders();
+            } catch  {
+                Swal.fire("Error", "No se pudo cancelar la solicitud.", "error");
+            }
         }
     };
     return (
@@ -70,7 +76,7 @@ export default function MyOrders() {
                                     <p className="card-text">
                                         <strong>Cantidad solicitada:</strong> {p.cantidad}<br />
                                         Empresa: {p.empresaNombre}<br />
-                                        Estado: {p.estado}
+                                        Estado: <span className={`fw-bold text-${p.estado === 'pendiente' ? 'warning' : p.estado === 'confirmado' ? 'success' : 'danger'}`}>{p.estado}</span>
                                     </p>
                                     <button className="btn btn-danger btn-sm" onClick={() => cancel(p.id)}>
                                         Cancelar

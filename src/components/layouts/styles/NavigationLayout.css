@@ -1,0 +1,29 @@
+#profilebar{
+    background-color: #949D73;
+}
+#profilebar button{
+    color: #FDF8EC;
+}
+#profilebar button:hover{
+    color: #FDF8EC;
+    background-color: #7A8B5C;
+}
+#profileDropdown{
+    background-color: #949D73;
+}
+#profileDropdownLogout{
+    color: #C65F5F !important;
+}
+#navsidebar{
+    background-color: #95A377;
+}
+#navlink{
+    color: #FDF8EC;
+}
+#navlink:hover{
+    color: #FDF8EC;
+    background-color: #7A8B5C;
+}
+#navsidebarHead{
+    color: #EDFCEE;
+}

@@ -75,7 +75,11 @@ export default function ProductCard({ product, reload }) {
                     />
                     <button
                         className="btn btn-success"
-                        disabled={product.cantidad < 1}
+                        disabled={
+                            product.cantidad < 1 ||
+                            cantidad < 1 ||
+                            cantidad > product.cantidad
+                        }
                         onClick={order}
                     >
                         Solicitar

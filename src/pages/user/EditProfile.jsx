@@ -1,15 +1,22 @@
+import '../../components/layouts/styles/GeneralStyle.css';
 import { useEffect, useState } from "react";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { useAuth } from "../../context/AuthContext";
 import { db } from "../../services/firebase";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { ValidationModule } from "../../components/ValidationModule";
 
 export default function EditProfile() {
     const { user } = useAuth();
     const [data, SetData] = useState(null);
     const [editing, SetEditing] = useState(false);
     const navigate = useNavigate();
+
+    const textRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+    const phoneRegex = /^\+[0-9]{11}/;
+    const addressRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\s]+$/;
+
     useEffect(() => {
         const obtener = async () => {
             const ref = doc(db, "usuarios", user.uid);
@@ -25,6 +32,18 @@ export default function EditProfile() {
     };
 
     const save = async () => {
+        if (!data.nombre || data.nombre.length < 8 || data.nombre.length > 100 || !textRegex.test(data.nombre)) {
+            Swal.fire("Error", "El nombre debe tener entre 8 y 100 caracteres y solo letras y espacios.", "error");
+            return;
+        }
+        if (data.direccion.length < 10 || data.direccion.length > 200 || !addressRegex.test(data.direccion)) {
+            Swal.fire("Error", "La dirección debe tener entre 10 y 200 caracteres y solo letras, números y espacios.", "error");
+            return;
+        }
+        if (data.telefono && !phoneRegex.test(data.telefono)) {
+            Swal.fire("Error", "El teléfono debe tener el formato +569XXXXXXXX.", "error");
+            return;
+        }
         try {
             const ref = doc(db, "usuarios", user.uid);
             await updateDoc(ref, {
@@ -46,20 +65,53 @@ export default function EditProfile() {
             </button>
             <h2>Editar Perfil</h2>
             <div className="mb-3">
-                <label>Nombre:</label>
-                <input className="form-control" name="nombre" value={data.nombre} onChange={handleChange} disabled={!editing} />
+                <ValidationModule
+                    label="Nombre"
+                    name="nombre"
+                    value={data.nombre || ""}
+                    onChange={handleChange}
+                    type="text"
+                    required={true}
+                    minLength={8}
+                    maxLength={100}
+                    regex={textRegex}
+                    errorMessage="El nombre debe tener entre 8 y 100 caracteres y solo letras y espacios."
+                    disabled={!editing}
+                />
             </div>
             <div className="mb-3">
                 <label>Email:</label>
                 <input className="form-control" value={data.email} disabled />
             </div>
             <div className="mb-3">
-                <label>Teléfono:</label>
-                <input className="form-control" name="telefono" value={data.telefono} onChange={handleChange} disabled={!editing} />
+                <ValidationModule
+                    label="Teléfono"
+                    name="telefono"
+                    value={data.telefono || ""}
+                    onChange={handleChange}
+                    type="text"
+                    required={false}
+                    minLength={9}
+                    maxLength={12}
+                    regex={phoneRegex}
+                    errorMessage="El teléfono debe tener el formato +569XXXXXXXX."
+                    disabled={!editing}
+                />
             </div>
             <div className="mb-3">
-                <label>Dirección:</label>
-                <input className="form-control" name="direccion" value={data.direccion} onChange={handleChange} disabled={!editing} />
+                <ValidationModule
+                    label="Dirección"
+                    name="direccion"
+                    value={data.direccion || ""}
+                    onChange={handleChange}
+                    type="text"
+                    required={true}
+                    minLength={10}
+                    maxLength={200}
+                    regex={addressRegex}
+                    errorMessage="La dirección debe tener entre 10 y 200 caracteres y solo letras, números y espacios."
+                    disabled={!editing}
+                />
             </div>
             {!editing ? (
                 <button className="btn btn-primary" onClick={() => SetEditing(true)}>Editar</button>

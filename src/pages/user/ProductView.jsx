@@ -1,3 +1,4 @@
+import '../../components/layouts/styles/GeneralStyle.css';
 import { useEffect, useState } from "react";
 import { GetProducts } from "../../services/clientService";
 import ProductCard from "../../components/ProductCard";
@@ -13,13 +14,12 @@ export default function ProductView() {
     const navigate = useNavigate();
     useEffect(() => {
         LoadProducts();
-    },);
+    }, [filter]);
     const LoadProducts = async () => {
         const data = await GetProducts(filter);
         SetProducts(data);
     };
     const handleOrder = async (product) => {
-        console.log("Producto al solicitar:", product);
         const confirmacion = await Swal.fire({
             title: "¿Solicitar este producto?",
             text: product.nombre,

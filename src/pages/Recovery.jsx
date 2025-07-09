@@ -1,3 +1,4 @@
+import '../components/layouts/styles/GeneralStyle.css';
 import { useState } from "react";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../services/firebase";
